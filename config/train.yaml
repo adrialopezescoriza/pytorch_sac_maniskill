@@ -1,5 +1,8 @@
 defaults:
+    - _self_
     - agent: sac
+    - critic: double_q_critic
+    - actor: diag_gaussian_actor
 
 env: cheetah_run
 
@@ -29,6 +32,5 @@ seed: 1
 
 # hydra configuration
 hydra:
-    name: ${env}
     run:
         dir: ./exp/${now:%Y.%m.%d}/${now:%H%M}_${agent.name}_${experiment}

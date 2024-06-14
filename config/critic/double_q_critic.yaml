@@ -1,0 +1,5 @@
+_target_: agent.critic.DoubleQCritic
+obs_dim: ${agent.params.obs_dim}
+action_dim: ${agent.params.action_dim}
+hidden_dim: 1024
+hidden_depth: 2
