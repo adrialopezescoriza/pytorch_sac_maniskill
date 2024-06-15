@@ -75,6 +75,7 @@ class Workspace(object):
                         self.step)
         self.logger.log('eval/episode_success', info['success'],
                         self.step)
+        self.logger.log_video('eval/video', self.video_recorder.frames, self.step)
         self.logger.dump(self.step)
 
     def run(self):
