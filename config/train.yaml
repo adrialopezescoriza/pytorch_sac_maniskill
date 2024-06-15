@@ -4,8 +4,6 @@ defaults:
     - critic: double_q_critic
     - actor: diag_gaussian_actor
 
-env: cheetah_run
-
 # this needs to be specified manually
 experiment: test_exp
 
@@ -26,6 +24,9 @@ log_save_tb: true
 # video recorder
 save_video: true
 
+# environment
+task: ???
+obs: state
 
 seed: 1
 
@@ -34,3 +35,20 @@ seed: 1
 hydra:
     run:
         dir: ./exp/${now:%Y.%m.%d}/${now:%H%M}_${agent.name}_${experiment}
+
+# convenience
+work_dir: ???
+task_title: ???
+multitask: ???
+tasks: ???
+obs_shape: ???
+action_dim: ???
+episode_length: ???
+obs_shapes: ???
+action_dims: ???
+episode_lengths: ???
+seed_steps: ???
+bin_size: ???
+
+# drS
+drS_ckpt: ???
