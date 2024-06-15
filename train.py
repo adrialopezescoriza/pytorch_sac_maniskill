@@ -69,13 +69,13 @@ class Workspace(object):
                 episode_reward += reward
 
             average_episode_reward += episode_reward
+            self.logger.log_video('eval/video', self.video_recorder.frames, self.step)
             self.video_recorder.save(f'{self.step}.mp4')
         average_episode_reward /= self.cfg.num_eval_episodes
         self.logger.log('eval/episode_reward', average_episode_reward,
                         self.step)
         self.logger.log('eval/episode_success', info['success'],
                         self.step)
-        self.logger.log_video('eval/video', self.video_recorder.frames, self.step)
         self.logger.dump(self.step)
 
     def run(self):
