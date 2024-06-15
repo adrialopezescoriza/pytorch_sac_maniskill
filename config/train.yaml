@@ -4,9 +4,6 @@ defaults:
     - critic: double_q_critic
     - actor: diag_gaussian_actor
 
-# this needs to be specified manually
-experiment: test_exp
-
 num_train_steps: 1e6
 replay_buffer_capacity: ${num_train_steps}
 
@@ -25,11 +22,13 @@ log_save_tb: true
 save_video: true
 
 # environment
-task: ???
+task: cheetah_run
 obs: state
 
 seed: 1
 
+# this needs to be specified manually
+experiment: ${task}-${seed}
 
 # hydra configuration
 hydra:

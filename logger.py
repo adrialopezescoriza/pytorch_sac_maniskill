@@ -1,4 +1,5 @@
 from torch.utils.tensorboard import SummaryWriter
+import wandb
 from collections import defaultdict
 import json
 import os
@@ -10,15 +11,17 @@ from termcolor import colored
 
 COMMON_TRAIN_FORMAT = [
     ('episode', 'E', 'int'),
-    ('step', 'S', 'int'),
+    ('step', 'ST', 'int'),
     ('episode_reward', 'R', 'float'),
-    ('duration', 'D', 'time') 
+    ('duration', 'D', 'time'),
+    ('episode_success', 'S', 'int')
 ]
 
 COMMON_EVAL_FORMAT = [
     ('episode', 'E', 'int'),
     ('step', 'S', 'int'),
-    ('episode_reward', 'R', 'float') 
+    ('episode_reward', 'R', 'float'),
+    ('episode_success', 'S', 'int')
 ]
 
 
@@ -117,11 +120,14 @@ class MetersGroup(object):
 class Logger(object):
     def __init__(self,
                  log_dir,
+                 cfg,
                  save_tb=False,
                  log_frequency=10000,
                  agent='sac'):
+
         self._log_dir = log_dir
         self._log_frequency = log_frequency
+        wandb.init(project="pytorch-sac", sync_tensorboard=True, dir=log_dir, name=cfg.experiment)
         if save_tb:
             tb_dir = os.path.join(log_dir, 'tb')
             if os.path.exists(tb_dir):

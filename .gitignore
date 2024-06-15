@@ -1,8 +1,5 @@
 __pycache__/
 .ipynb_checkpoints/
 exp
-tb
-*.csv
-video/
-ckpt/
-nautilus/
+ckpt
+nautilus
