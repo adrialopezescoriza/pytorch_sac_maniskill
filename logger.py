@@ -159,6 +159,7 @@ class Logger(object):
         if self._sw is not None:
             frames = torch.from_numpy(np.array(frames))
             frames = frames.unsqueeze(0)
+            frames = frames.permute(0,1,4,2,3) # N,T,H,W,C -> N,T,C,H,W
             self._sw.add_video(key, frames, step, fps=30)
 
     def _try_sw_log_histogram(self, key, histogram, step):
