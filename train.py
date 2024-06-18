@@ -121,7 +121,8 @@ class Workspace(object):
 
             # run training update
             if self.step >= self.cfg.num_seed_steps:
-                self.agent.update(self.replay_buffer, self.logger, self.step)
+                for local_update in range(self.agent.num_updates_per_training):
+                    self.agent.update(self.replay_buffer, self.logger, self.step)
 
             next_obs, reward, done, info = self.env.step(action)
             success = info['success']

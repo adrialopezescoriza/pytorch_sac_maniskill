@@ -17,7 +17,7 @@ class SACAgent(Agent):
                  actor, discount, init_temperature, alpha_lr, alpha_betas,
                  actor_lr, actor_betas, actor_update_frequency, critic_lr,
                  critic_betas, critic_tau, critic_target_update_frequency,
-                 batch_size, learnable_temperature):
+                 batch_size, learnable_temperature, update_to_data_ratio):
         super().__init__()
 
         self.action_range = action_range
@@ -28,6 +28,8 @@ class SACAgent(Agent):
         self.critic_target_update_frequency = critic_target_update_frequency
         self.batch_size = batch_size
         self.learnable_temperature = learnable_temperature
+        assert (1 / update_to_data_ratio).is_integer()
+        self.num_updates_per_training = int(1 / update_to_data_ratio)
 
         self.critic = critic.to(self.device)
         self.critic_target = copy.deepcopy(critic).to(
