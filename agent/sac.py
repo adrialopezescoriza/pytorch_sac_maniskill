@@ -135,7 +135,7 @@ class SACAgent(Agent):
 
         logger.log('train/batch_reward', reward.mean(), step)
 
-        self.update_critic(obs, action, reward, next_obs, not_done,
+        self.update_critic(obs, action, reward, next_obs, not_done_no_max,
                            logger, step)
 
         if step % self.actor_update_frequency == 0:
