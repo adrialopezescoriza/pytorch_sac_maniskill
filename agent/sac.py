@@ -89,9 +89,15 @@ class SACAgent(Agent):
 
         # get current Q estimates
         current_Q1, current_Q2 = self.critic(obs, action)
-        critic_loss = F.mse_loss(current_Q1, target_Q) + F.mse_loss(
-            current_Q2, target_Q)
+        q1_loss = F.mse_loss(current_Q1, target_Q)
+        q2_loss = F.mse_loss(current_Q2, target_Q)
+        critic_loss =  q1_loss + q2_loss
         logger.log('train_critic/loss', critic_loss, step)
+        logger.log('train_critic/q1_loss', q1_loss, step)
+        logger.log('train_critic/q2_loss', q2_loss, step)
+
+        logger.log('train/q1_values', current_Q1.mean().item(), step)
+        logger.log('train/q2_values', current_Q2.mean().item(), step)
 
         # Optimize the critic
         self.critic_optimizer.zero_grad()
