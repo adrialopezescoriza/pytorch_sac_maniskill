@@ -57,36 +57,6 @@ MANISKILL_TASKS = {
 }
 
 
-class ManiSkillWrapper(gym.Wrapper):
-	def __init__(self, env, cfg):
-		super().__init__(env)
-		self.env = env
-		self.cfg = cfg
-		self.observation_space = self.env.observation_space
-		self.action_space = gym.spaces.Box(
-			low=np.full(self.env.action_space.shape, self.env.action_space.low.min()),
-			high=np.full(self.env.action_space.shape, self.env.action_space.high.max()),
-			dtype=self.env.action_space.dtype,
-		)
-
-	def reset(self):
-		return self.env.reset()
-	
-	def step(self, action):
-		reward = 0
-		for _ in range(2):
-			obs, r, done, info = self.env.step(action)
-			reward += r
-		return obs, reward, done, info
-
-	@property
-	def unwrapped(self):
-		return self.env.unwrapped
-
-	def render(self, args, **kwargs):
-		return self.env.render(mode='cameras')
-
-
 def make_env(cfg):
 	"""
 	Make ManiSkill2 environment.
@@ -107,7 +77,6 @@ def make_env(cfg):
 	if task_cfg.get("reward_mode", None) == "drS":
 		env = DrsRewardWrapper(env, cfg.drS_ckpt)
 	
-	env = ManiSkillWrapper(env, cfg)
-	env = TimeLimit(env, max_episode_steps=100)
+	env = TimeLimit(env, max_episode_steps=200)
 	env.max_episode_steps = env._max_episode_steps
 	return env
