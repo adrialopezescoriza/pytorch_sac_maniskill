@@ -59,6 +59,78 @@ class PickAndPlace_DrS_learn(PickSingleYCBEnv, DrS_BaseEnv):
 class PickAndPlace_DrS_reuse(PickCubeEnv, PickAndPlace_DrS_learn):
     pass
 
+############################################
+# Stack Cube
+############################################
+
+from mani_skill2.envs.pick_and_place.stack_cube import StackCubeEnv
+
+@register_env("StackCube_DrS_learn-v0", max_episode_steps=100)
+class StackCube_DrS_learn(StackCubeEnv, DrS_BaseEnv):
+    def __init__(self, *args, **kwargs):
+        self.n_stages = 3
+        super().__init__(*args, **kwargs)
+
+    def check_cube_A_placed(self):
+        '''
+        Checks if cube A is above cube B and roughly in the same plane position
+        '''
+        pos_A = self.cubeA.pose.p
+        pos_B = self.cubeB.pose.p
+        offset = pos_A - pos_B
+        xy_flag = (
+            np.linalg.norm(offset[:2]) <= np.linalg.norm(self.box_half_size[:2]) + 0.05
+        )
+
+        z_flag = np.abs(offset[2] - self.box_half_size[2] * 2) <= 0.05
+        return bool(xy_flag and z_flag)
+
+    def compute_stage_indicator(self):
+        return {
+            'is_grasped': float(self.agent.check_grasp(self.cubeA)),
+            'is_cube_A_placed': float(self._check_cubeA_on_cubeB()),
+        }
+
+@register_env("StackCube_DrS_reuse-v0", max_episode_steps=100)
+class StackCube_DrS_reuse(StackCube_DrS_learn, DrS_BaseEnv):
+    pass
+
+############################################
+# Peg Insertion
+############################################
+
+from mani_skill2.envs.assembly.peg_insertion_side import PegInsertionSideEnv
+
+@register_env("PegInsertionSide_DrS_learn-v0", max_episode_steps=100)
+class PegInsertionSide_DrS_learn(PegInsertionSideEnv, DrS_BaseEnv):
+    def __init__(self, *args, **kwargs):
+        self.n_stages = 3
+        super().__init__(*args, **kwargs)
+
+    def is_peg_aligned(self):
+        # Only head position is used in fact
+        peg_head_pose = self.peg.pose.transform(self.peg_head_offset)
+        box_hole_pose = self.box_hole_pose
+        peg_head_pos_at_hole = (box_hole_pose.inv() * peg_head_pose).p
+        # x-axis is hole direction
+        x_flag = -0.015 <= peg_head_pos_at_hole[0]
+        y_flag = (
+            -self.box_hole_radius <= peg_head_pos_at_hole[1] <= self.box_hole_radius
+        )
+        z_flag = (
+            -self.box_hole_radius <= peg_head_pos_at_hole[2] <= self.box_hole_radius
+        )
+        return (y_flag and z_flag)
+
+    def compute_stage_indicator(self):
+        return {
+            'is_grasped': float(self.agent.check_grasp(self.peg)),
+            'is_peg_aligned': float(self.is_peg_aligned()),
+        }
+
+@register_env("PegInsertionSide_DrS_reuse-v0", max_episode_steps=100)
+class PegInsertionSide_DrS_reuse(PegInsertionSide_DrS_learn, DrS_BaseEnv):
+    pass
 
 ############################################
 # Turn Faucet
