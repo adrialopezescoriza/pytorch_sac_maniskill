@@ -103,8 +103,8 @@ class ManiSkillWrapper(gym.Wrapper):
 		return self.env.reset()
 	
 	def step(self, action):
-		obs, rew, _, info = self.env.step(action)
-		return obs, rew, False, info
+		obs, rew, done, info = self.env.step(action)
+		return obs, rew, done, info
 
 	@property
 	def unwrapped(self):
