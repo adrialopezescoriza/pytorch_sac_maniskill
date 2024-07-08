@@ -18,7 +18,7 @@ MANISKILL_TASKS = {
 	),
 	'stack-cube': dict(
 		env='StackCube-v0',
-		control_mode='pd_ee_delta_pose',
+		control_mode='pd_ee_delta_pos',
 	),
 	'pick-ycb': dict(
 		env='PickSingleYCB-v0',
@@ -30,11 +30,6 @@ MANISKILL_TASKS = {
 	),
 	'pick-place': dict(
 		env='PickAndPlace_DrS_reuse-v0',
-		control_mode='pd_ee_delta_pose',
-		reward_mode='dense',
-	),
-	'stack-cube': dict(
-		env='StackCube_DrS_reuse-v0',
 		control_mode='pd_ee_delta_pose',
 		reward_mode='dense',
 	),
@@ -56,7 +51,7 @@ MANISKILL_TASKS = {
 	),
 	'stack-cube-semi': dict (
 		env='StackCube_DrS_reuse-v0',
-		control_mode='pd_ee_delta_pose',
+		control_mode='pd_ee_delta_pos',
 		reward_mode='semi_sparse', 
 	),
 	'peg-insertion-semi': dict (
@@ -76,7 +71,7 @@ MANISKILL_TASKS = {
 	),
 	'stack-cube-drS': dict (
 		env='StackCube_DrS_reuse-v0',
-		control_mode='pd_ee_delta_pose',
+		control_mode='pd_ee_delta_pos',
 		reward_mode='drS', 
 	),
 	'peg-insertion-drS': dict (
